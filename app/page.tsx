@@ -34,13 +34,34 @@ export default function Home() {
   useEffect(() => {
     const saved = localStorage.getItem('trackedProducts');
     if (saved) {
-      const parsed = JSON.parse(saved);
-      setTrackedProducts(parsed.map((p: TrackedProduct) => ({
+      interface SavedPriceHistory {
+        price: string;
+        date: string;
+      }
+      interface SavedProduct {
+        id: string;
+        url: string;
+        name: string;
+        price: string;
+        originalPrice?: string;
+        discount?: string;
+        inStock: boolean;
+        seller: string;
+        rating?: string;
+        reviewCount?: string;
+        lastChecked: string;
+        imageUrl?: string;
+        addedAt: string;
+        notifications: boolean;
+        priceHistory: SavedPriceHistory[];
+      }
+      const parsed: SavedProduct[] = JSON.parse(saved);
+      setTrackedProducts(parsed.map((p) => ({
         ...p,
         lastChecked: new Date(p.lastChecked),
         addedAt: new Date(p.addedAt),
-        priceHistory: p.priceHistory.map((h: { price: string; date: string }) => ({
-          ...h,
+        priceHistory: p.priceHistory.map((h) => ({
+          price: h.price,
           date: new Date(h.date)
         }))
       })));
@@ -358,7 +379,7 @@ export default function Home() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                           </svg>
                         </button>
-                        <a
+                        
                           href={product.url}
                           target="_blank"
                           rel="noopener noreferrer"
